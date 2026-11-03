@@ -13,7 +13,8 @@ export default defineConfig({
   forbidOnly: isCI,
   /* Retry on CI only, to absorb flakiness from the public demo site */
   retries: isCI ? 2 : 0,
-  workers: isCI ? 2 : undefined,
+  /* Run up to 3 tests at the same time */
+  workers: 3,
   reporter: [['list'], ['html', { open: 'never' }]],
   /* Shared settings for all tests. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -24,9 +25,9 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
 
-    /* Keep a screenshot and video of failed tests for debugging */
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
+    /* Keep a screenshot and video of every test, passed or failed */
+    screenshot: 'on',
+    video: 'on',
   },
 
   projects: [

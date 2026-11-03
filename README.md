@@ -6,25 +6,17 @@ Site under test: [SauceDemo](https://www.saucedemo.com), a demo online store.
 
 ## The test
 
-`tests/checkout.spec.ts` covers one end-to-end user journey:
-
-1. **Log in** as `standard_user`
-2. **Add** "Sauce Labs Backpack" to the cart and check the cart badge shows 1
-3. **Check out** – verify the cart, enter customer details, finish, and see "Thank you for your order!"
+`tests/login.spec.ts` logs in as `standard_user` and checks that the Products page opens.
 
 ## Project structure
 
 ```
 src/
   pages/
-    BasePage.ts          Shared behaviour for all page objects (goto)
     LoginPage.ts         Username, password, login button
-    InventoryPage.ts     Product list, add to cart, cart icon
-    CartPage.ts          Items in cart, checkout button
-    CheckoutPage.ts      Customer details form, finish, confirmation
-  fixtures/index.ts      Gives tests ready-made page objects
+    InventoryPage.ts     Products page shown after login
 tests/
-  checkout.spec.ts       Login → add to cart → checkout
+  login.spec.ts          Log in and land on the Products page
 playwright.config.ts     Base URL, browser, reporters, screenshots/videos
 ```
 
@@ -51,8 +43,6 @@ npx playwright install chromium
 ## Design decisions
 
 - **Page Object Model** – each page class holds its locators and actions; the test only describes what the user does. If the UI changes, only the page object needs updating.
-- **Fixtures** – the test asks for `loginPage`, `cartPage`, etc. as arguments instead of creating them itself.
 - **Stable locators** – `getByTestId` (the site's `data-test` attributes) and `getByRole`, instead of long CSS or XPath selectors.
-- **Test steps** – `test.step` splits the journey into named steps that show up in the HTML report.
 - **Debugging on failure** – screenshots and videos are kept for failed tests.
 - **CI** – GitHub Actions runs lint, type check, formatting check and the tests on every push, and uploads the HTML report.
